@@ -3,17 +3,34 @@
 
     <div class="container-fluid">
         <!-- DataTales Example -->
+        <div class="card bg-secondary-subtle shadow-none position-relative overflow-hidden mb-4">
+            <div class="card-body px-4 py-3">
+                <div class="row align-items-center">
+                    <div class="col-9">
+                        <h1 class="fs-6 fw-bold mb-8">Mes affectations</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a class="text-muted text-decoration-none" href="/dashboard">Accueil</a>
+                            </li>
+                            <li class="breadcrumb-item" aria-current="page">Mes affectations</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="card shadow mb-4">
             <div class="card-header py-3" style="display:flex;justify-content:space-between; align-items:center;">
-                <h3 class="m-0 font-weight-bold text-primary">Les affectations reçues</h3>
+                <h3 class="m-0 font-weight-bold text-primary">Affectations reçues</h3>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table  style="text-align:center;" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-striped" id="dataTable">
                         <thead>
                             <th>Date</th>
                             <th>Service origine</th>
-                            <th>Fichier </th>
+                            {{-- <th>Fichier </th> --}}
                             <th>instruction</th>
                             <th>Actions</th>
                         </thead>
@@ -23,7 +40,7 @@
                            <tr>
                                 <td>{{ $affectation->date }}</td>
                                 <td>{{ $affectation->id_service_origine}}</td>
-                                <td>{{ $affectation->fichier }}</td>
+                                {{-- <td>{{ $affectation->fichier }}</td> --}}
                                 <td>{{ $affectation->instruction }}</td>
                                 <td>
                                     <div style="display:flex;justify-content:center;">
@@ -55,11 +72,11 @@
 
         <div class="card shadow mt-5">
             <div class="card-header py-3" style="display:flex;justify-content:space-between; align-items:center;">
-                <h3 class="m-0 font-weight-bold text-primary">Les affectations envoyées</h3>
+                <h3 class="m-0 font-weight-bold text-primary">Affectations envoyées</h3>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table  style="text-align:center;" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-striped" id="dataTable">
                         <thead>
                             <th>Date</th>
                             <th>Service arrivée</th>

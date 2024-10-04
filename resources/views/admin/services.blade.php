@@ -3,6 +3,23 @@
 <div class="container-fluid">
 
     <!-- DataTales Example -->
+    <div class="card bg-secondary-subtle shadow-none position-relative overflow-hidden mb-4">
+        <div class="card-body px-4 py-3">
+            <div class="row align-items-center">
+                <div class="col-9">
+                    <h1 class="fs-6 fw-bold mb-8">Gérer les services</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a class="text-muted text-decoration-none" href="/dashboard">Accueil</a>
+                            </li>
+                            <li class="breadcrumb-item" aria-current="page">Gérer les services</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="card shadow mb-4">
         <div class="card-header py-3" style="display:flex; justify-content:space-between; align-items:center;">
             <h1 class="m-0 font-weight-bold text-primary" style="text-transform: uppercase;">Liste des services</h1>
@@ -10,7 +27,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-striped" id="dataTable">
                     <thead>
                         <tr>
                             <th>Service</th>
@@ -38,7 +55,7 @@
                                     <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Suppression de {{$service->service}}</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Suppression du service "{{$service->service}}"</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">

@@ -6,15 +6,9 @@ use App\Models\CourrierDepart;
 use App\Models\Service;
 use App\Models\User;
 use App\Models\Affectation;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Auth;
 use App\Models\Traitement;
-
-
-
-
+use Illuminate\Database\Eloquent\Collection;
 
 class NavController extends Controller
 {
@@ -49,6 +43,7 @@ class NavController extends Controller
            if($type == 'arrivee'){
             $courrier = CourrierArrivee::create([
                 'date_ajout' => $request->date_ajout,
+                'numero_reference' => $request->numero_reference,
                 'date_recu'  => $request->date_recu,
                 'expediteur' => $request->expediteur,
                 'fichier'    => $path,
@@ -66,7 +61,7 @@ class NavController extends Controller
            }
 
            toaster()->add('Add message here');
-            return view('save', ['status'=>'Enrégistrement effectué avec succès', 'type' =>$type]);
+            return to_route('courrier_depart')->with('success','Courrier enregistré !');
         }
         else
         {
@@ -77,6 +72,23 @@ class NavController extends Controller
     public function courrier_arrivee(){                    // pour afficher les courriers arrivées depuis la base
         $courriers= CourrierArrivee::orderBy('created_at', 'desc')->get();
         return view('courrier_arrivee', ['courriers'=> $courriers]);
+    }
+
+    public function modifier_courrier(Request $request, $id){
+
+        $courrier = CourrierArrivee::find($id);
+        $courrier->update([
+            'date_ajout' => $request->date_ajout,
+            'numero_reference' => $request->numero_reference,
+            'date_recu'  => $request->date_recu,
+            'expediteur' => $request->expediteur,
+            'objet'      => $request->objet,
+        ]);
+        if($request->hasFile('avatar')){
+            $file = $request->file('avatar');
+            $file->storeAs('public/'.$courrier->fichier);
+        }
+        return to_route('courrier_arrivee')->with('success', 'Courrier modifié avec succès');
     }
 
     public function courrier_depart(){                    // pour afficher les courriers arrivées
@@ -98,7 +110,7 @@ class NavController extends Controller
     }
 
     public function affecter (Request $request, $id){
-
+        //Le $id correspond au id du ourrier arrivee
         if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
 
@@ -111,16 +123,16 @@ class NavController extends Controller
             $filename = time().'.'.$file->getClientOriginalExtension();
             $path = $file->storeAs('dossieraffectation', $filename, 'public');
         }else{
-            $path=null;
+            $courrierArrivee = CourrierArrivee::findOrFail($id);
+            $path=$courrierArrivee->fichier;
         }
-            $services = Service::all();
 
             $courrier = Affectation::create([
                 'date' => $request->date,
                 'id_service_arrivee'  => $request->idservice,
                 'id_service_origine'  => $request->user()->id_service,
                 'id_courrier_arrivee' => $id,
-                'fichier'    => $path,
+                'fichier' => $path,
                 'instruction' => $request->instruction,
 
             ]);
@@ -145,18 +157,6 @@ class NavController extends Controller
         $affectations = Affectation::where('id_service_arrivee', auth()->user()->id_service)->get();
 
         $mes_affectations = Affectation::where('id_service_origine', auth()->user()->id_service)->get();
-        // foreach($affectations as  $affectation){
-        //     $service_arrivee= User::find($affectation->id_service_arrivee);
-        //     $affectation->service_arrivee = $service_arrivee->service;
-        //     $service_origine= User::find($affectation->id_service_origine);
-        //     $affectation->service_origine = $service_origine->service;
-        // }
-        // foreach($mes_affectations as  $mes_affectation){
-        //     $service_arrivee= User::find($affectation->id_service_arrivee);
-        //     $mes_affectation->service_arrivee = $service_arrivee->service;
-        //     $service_origine= User::find($mes_affectation->id_service_origine);
-        //     $mes_affectation->service_origine = $service_origine->service;
-        // }
         return view ('afficheaffectation', ['affectations'=>$affectations, 'mes_affectations'=>$mes_affectations]);
     }
 
@@ -198,7 +198,7 @@ class NavController extends Controller
                 'fichier'=>$path,
                 'commentaire' => $request->commentaire,
             ]);
-            return redirect()->back()->with('success', 'Affectation éffectuer avec succès.');
+            return redirect()->back()->with('success', 'Affectation effectuée avec succès.');
     }
 
     public function showtraitement(){
@@ -237,7 +237,7 @@ class NavController extends Controller
         $affectations = Affectation::all();
         return view ('affecterservice', ['id'=>$id, 'id_courrier_arrivee'=>$id_courrier_arrivee , 'id_service'=>$id_service, 'affectations'=>$affectations, 'services'=>$services]);
     }
-    public  function affecterexistantservice(Request $request, $id , $id_courrier_arrivee, $id_service){
+    public function affecterexistantservice(Request $request, $id , $id_courrier_arrivee, $id_service){
 
 
         if ($request->hasFile('avatar')) {
@@ -291,6 +291,19 @@ class NavController extends Controller
             'courrier_depart_archives'=>$courrier_depart_archives,
             ]
          );
+
+
+    }
+
+    public function affecterService($idCourrierArrivee){
+            $services = Service::all();
+            return view('affectation', ['idCourrierArrivee'=>$idCourrierArrivee, 'services'=>$services]);
+    }
+
+    public function suivre_courrier(){
+        $courrier = CourrierArrivee::where('numero_reference', request('numero_reference'))->firstOrFail();
+
+        return view('resultats_suivi', ['actions'=>$courrier->affectations()->orderByDesc('date')->get(),'courrier'=>$courrier]);
     }
 }
 

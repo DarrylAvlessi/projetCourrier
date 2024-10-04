@@ -16,4 +16,7 @@ class Traitement extends Model
         'fichier',
         'commentaire'
     ];
+    public function affectation(){
+        return $this->belongsTo(Affectation::class, 'id_affectation', 'id');
+    }
 }

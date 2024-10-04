@@ -20,8 +20,12 @@ class Affectation extends Model
 
 
 
-    public function services(){
-        return $this->belongsTo(Service::class);
+    public function service_origine(){
+        return $this->belongsTo(Service::class,'id_service_origine');
+    }
+
+    public function service_arrivee(){
+        return $this->belongsTo(Service::class,'id_service_arrivee');
     }
 
     public function courrier_arrivees(){

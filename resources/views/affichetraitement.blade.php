@@ -3,13 +3,27 @@
 
     <div class="container-fluid">
         <!-- DataTales Example -->
-        <div class="card shadow mb-4">
-            <div class="card-header py-3" style="display:flex;justify-content:space-between; align-items:center;">
-                <h3 class="m-0 font-weight-bold text-primary">Les traitements</h3>
+        <div class="card bg-secondary-subtle shadow-none position-relative overflow-hidden mb-4">
+            <div class="card-body px-4 py-3">
+                <div class="row align-items-center">
+                    <div class="col-9">
+                        <h1 class="fs-6 fw-bold mb-8">Mes traitements</h1>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a class="text-muted text-decoration-none" href="/dashboard">Accueil</a>
+                            </li>
+                            <li class="breadcrumb-item" aria-current="page">Mes traitements</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div class="card shadow mb-4">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-striped" id="dataTable">
                         <thead>
                             <tr>
                                 <th>date</th>
@@ -17,13 +31,13 @@
                                 <th>fichier</th>
                                 <th>Agent reçu</th>
                                 <th>commentaire</th>
-                                <th>Actions<th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                           @foreach($traitements as $traitement)
-                           <tr>
+                        @foreach($traitements as $traitement)
+                            <tr>
                                 <td>{{ $traitement->date }}</td>
                                 <td>{{$traitement->id_user_origine }} </td>
                                 <td>
